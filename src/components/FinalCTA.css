@@ -1,0 +1,38 @@
+/* ============================================================
+   Final CTA — luminous rounded panel, light theme
+   ============================================================ */
+
+.final-panel {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2.75rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 4rem);
+  text-align: center;
+}
+.final-panel .lead { margin-inline: auto; }
+
+.final-glow {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 70%;
+  background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(79, 124, 255, 0.22), transparent 70%);
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.final-cta {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.final-note {
+  margin: 1.25rem 0 0;
+  color: var(--ink-3);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .final-glow { opacity: 0.3; }
+}

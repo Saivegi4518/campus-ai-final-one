@@ -1,0 +1,203 @@
+/* ============================================================
+   Demo Chat — light theme, glass cards, perspective tilt
+   ============================================================ */
+
+.demo { position: relative; }
+.demo-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+@media (max-width: 920px) {
+  .demo-grid { grid-template-columns: 1fr; }
+}
+
+.eyebrow { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); margin: 0 0 1rem; }
+.eyebrow::before { content: ''; width: 22px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--sky), var(--violet)); }
+
+.h2 { font-size: var(--fs-h2); line-height: 1.14; letter-spacing: -0.02em; margin: 0 0 0.9rem; text-wrap: balance; }
+.lead { color: var(--ink-2); font-size: var(--fs-lead); max-width: 62ch; margin: 0; text-wrap: pretty; }
+
+.demo-ctas { margin-top: 1.75rem; }
+.demo-ctas .btn-primary { min-height: 52px; }
+
+.demo-points {
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--ink-3);
+  font-size: 0.93rem;
+  font-weight: 600;
+}
+.demo-points li { display: flex; align-items: center; gap: 0.6rem; }
+.demo-points li::before { content: '→'; color: var(--blue); font-weight: 800; }
+
+/* ============================================================
+   Chat body
+   ============================================================ */
+
+.chat-shell { overflow: hidden; box-shadow: var(--shadow-md); }
+.chat-tilted {
+  position: relative;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+.chat-tilted:hover { transform: rotateY(0deg) rotateX(0deg); }
+
+.chat-head {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 1.2rem;
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.chat-dots { display: inline-flex; gap: 6px; }
+.chat-dots i { width: 10px; height: 10px; border-radius: 50%; background: rgba(79, 124, 255, 0.25); }
+.chat-dots i:first-child { background: rgba(79, 124, 255, 0.6); }
+.chat-dots i:nth-child(2) { background: rgba(167, 139, 250, 0.6); }
+.chat-dots i:nth-child(3) { background: rgba(52, 211, 153, 0.6); }
+.chat-title { display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 0.95rem; color: var(--ink-1); }
+.chat-live {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--emerald);
+}
+
+/* Chat bubbles */
+.chat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.4rem 1.2rem 1rem;
+  min-height: 340px;
+}
+.bubble {
+  max-width: 82%;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  font-size: 0.93rem;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity var(--dur-3) var(--ease-out), transform var(--dur-3) var(--ease-out);
+}
+.bubble.visible { opacity: 1; transform: none; }
+.bubble.student { align-self: flex-end; background: linear-gradient(135deg, #67E8F9 0%, #4F7CFF 100%); color: #fff; border-bottom-right-radius: 6px; }
+.bubble.ai { align-self: flex-start; background: var(--glass); border: 1px solid var(--glass-border); color: var(--ink-1); border-bottom-left-radius: 6px; }
+@keyframes bubble-in { to { opacity: 1; transform: none; } }
+
+.typing { display: inline-flex; gap: 6px; padding: 0.9rem 1.1rem; }
+.typing span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: typing 1.2s ease-in-out infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.15s; }
+.typing span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 0%, 60%, 100% { transform: none; opacity: 0.5; } 30% { transform: translateY(-5px); opacity: 1; } }
+
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.4rem 1.2rem 1.2rem;
+  padding: 0.8rem 0.8rem 0.8rem 1.1rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--glass-border);
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink-3);
+  font-size: 0.9rem;
+}
+.chat-send {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--grad-primary);
+  color: #fff;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+/* Context chips */
+.demo-context-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.demo-context-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--r-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-1);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+}
+
+/* Decorative animated beam along the chat shell edge */
+.border-beam-wrapper {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.border-beam {
+  position: absolute;
+  inset: -40% -20%;
+  background: conic-gradient(from 0deg, transparent 0 78%, rgba(103, 232, 249, 0.5) 86%, rgba(79, 124, 255, 0.55) 90%, transparent 96%);
+  animation: beam-rotate 7s linear infinite;
+  opacity: 0.5;
+}
+@keyframes beam-rotate { to { transform: rotate(360deg); } }
+
+/* Play / pause control for the animated demo */
+.demo-pause-btn {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  bottom: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-strong);
+  color: var(--ink-1);
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-2) var(--ease-out), box-shadow var(--dur-2) var(--ease-out);
+}
+.demo-pause-btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bubble { opacity: 1; transform: none; animation: none; }
+  .typing span { animation: none; }
+  .chat-tilted { transition: none; }
+}
+
+/* Low-power mode */
+html[data-lite] .demo-context-chips .chip { opacity: 0.7; }

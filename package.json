@@ -1,0 +1,27 @@
+{
+  "name": "campusai-landing",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CampusAI — AI-powered digital campus assistant for NSRIT students. Premium futuristic landing page.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "border-beam": "^1.4.1",
+    "metal-fx": "^2.0.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "thinking-orbs": "^0.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^5.5.3",
+    "vite": "^8.3.5"
+  }
+}

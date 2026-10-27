@@ -1,0 +1,198 @@
+/* ============================================================
+   AIOrb — centred, luminous intelligence core with glass cards
+   ============================================================ */
+
+.orb-stage {
+  position: relative;
+  width: min(520px, 100%);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  perspective: 1100px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  overflow: visible;
+}
+
+/* Soft background glow */
+.orb-halo {
+  position: absolute;
+  inset: 6% 6%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(79, 124, 255, 0.22) 0%, rgba(79, 124, 255, 0.12) 34%, transparent 66%),
+    radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.12) 0%, transparent 60%);
+  filter: blur(8px);
+}
+
+/* Orbit rings — crisp and visible on light backgrounds */
+.orb-ring {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  border-radius: 50%;
+  border-width: 1.5px;
+  border-style: solid;
+  border-color: rgba(79, 124, 255, 0.4);
+  transform-style: preserve-3d;
+}
+.ring-a {
+  width: 78%;
+  height: 78%;
+  transform: rotateX(68deg) rotateZ(0deg);
+  animation: ring-spin 26s linear infinite;
+}
+.ring-b {
+  width: 62%;
+  height: 62%;
+  transform: rotateX(68deg) rotateZ(40deg);
+  border-color: rgba(167, 139, 250, 0.45);
+  animation: ring-spin-rev 32s linear infinite;
+}
+.ring-c {
+  width: 92%;
+  height: 92%;
+  border-style: dashed;
+  border-color: rgba(79, 124, 255, 0.35);
+  animation: ring-spin 48s linear infinite;
+}
+
+/* Data nodes along the rings */
+.orb-ring {
+  --node-size: 5px;
+  --node-glow: 8px;
+}
+.orb-ring::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  width: var(--node-size);
+  height: var(--node-size);
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 var(--node-glow) 2px rgba(103, 232, 249, 0.6);
+}
+
+/* Core orb */
+.orb-core {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3.1);
+  transform-origin: center;
+  filter: drop-shadow(0 0 24px rgba(79, 124, 255, 0.35));
+}
+.orb-core canvas { display: block; border-radius: 50%; }
+.orb-fallback {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79,196,255,0.5), rgba(79,124,255,0.1) 70%);
+}
+.orb-core-glow {
+  position: absolute;
+  inset: -40%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(79, 124, 255, 0.16), transparent 65%);
+  z-index: -1;
+}
+
+/* Ground shadow / reflection ellipse - makes orb float */
+.orb-shadow {
+  position: absolute;
+  left: 50%;
+  bottom: -10%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 30%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse 60% 100% at 50% 60%, rgba(79, 124, 255, 0.22), transparent 70%);
+  filter: blur(6px);
+  opacity: 0.5;
+}
+
+/* Status chip - placed at bottom, never overlaps cards */
+.orb-status {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem 1.05rem;
+  border-radius: var(--r-pill);
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--ink-2);
+  white-space: nowrap;
+  z-index: 5; /* above cards */
+}
+
+/* Floating cards - repositioned, always inside bounds */
+.floater {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  max-width: 200px;
+  padding: 0.7rem 0.95rem;
+  border-radius: var(--r-md);
+  animation: float-y 7s ease-in-out infinite;
+  box-shadow: var(--shadow-md);
+  transform: translateZ(0); /* preserve 3D */
+}
+.floater-tag {
+  font-size: 0.66rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.floater-q { font-size: 0.86rem; font-weight: 600; color: var(--ink-1); line-height: 1.4; }
+
+/* Position each floater to avoid viewport edge */
+.f1 { top: 8%; left: 0%; transform: rotate(-3deg) translateZ(12px); }
+.f2 { top: 24%; right: 2%; transform: rotate(2deg) translateZ(8px); }
+.f3 { bottom: 22%; right: 0%; transform: rotate(-1deg) translateZ(10px); }
+.f4 { bottom: 6%; left: 0%; transform: rotate(3deg) translateZ(9px); }
+
+@keyframes ring-spin { to { transform: rotateX(68deg) rotateZ(360deg); } }
+@keyframes ring-spin-rev { from { transform: rotateX(68deg) rotateZ(40deg); } to { transform: rotateX(68deg) rotateZ(-320deg); } }
+
+/* Float cards */
+@keyframes float-y {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -10px; }
+}
+
+/* =============================
+   Mobile & Responsive
+   ============================= */
+
+@media (max-width: 560px) {
+  .orb-stage { width: min(380px, 100%); }
+  .orb-core { transform: translate(-50%, -50%) scale(2.3); }
+  .floater { max-width: 158px; padding: 0.55rem 0.75rem; }
+  .floater-q { font-size: 0.76rem; }
+  .f1 { left: 0; } .f2 { right: 0; } .f3 { right: 0; } .f4 { left: 0; }
+  .orb-shadow { bottom: -12%; height: 25%; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .orb-ring, .orb-status .pulse-dot, .floater { animation: none; }
+  .orb-stage, .orb-core { transform: none !important; }
+}
+
+/* Low-power mode */
+html[data-lite] .orb-ring,
+html[data-lite] .floater,
+html[data-lite] .orb-shadow,
+html[data-lite] .pulse-dot {
+  animation: none !important;
+}
